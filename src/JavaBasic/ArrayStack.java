@@ -1,6 +1,7 @@
 package JavaBasic;
 
 import java.lang.reflect.Array;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class ArrayStack<E> {
     E[] currentStack;
@@ -33,5 +34,20 @@ public class ArrayStack<E> {
         size--;
         currentStack = newStack;
         return returnValue;
+    }
+
+    public static void test() {
+        ArrayStack stack = new ArrayStack<Integer>(Integer.class);
+        for (int i = 0; i < 10; i++) {
+            int toPush = ThreadLocalRandom.current().nextInt();
+            System.out.print(toPush + ", ");
+            stack.push(toPush);
+        }
+
+        System.out.println();
+
+        for (int i = 0; i < 10; i++) {
+            System.out.print(stack.pop() + ", ");
+        }
     }
 }
