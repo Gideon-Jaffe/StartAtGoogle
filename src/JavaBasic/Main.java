@@ -1,9 +1,5 @@
 package JavaBasic;
 
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.concurrent.ThreadLocalRandom;
-
 public class Main {
     public static void main(String[] args) {
         testLoops();

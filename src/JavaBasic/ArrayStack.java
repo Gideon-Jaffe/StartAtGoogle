@@ -28,16 +28,14 @@ public class ArrayStack<E> {
         if (size == 0) return null;
         E returnValue = currentStack[size-1];
         E[] newStack = (E[])Array.newInstance(datatype, size-1);
-        for (int i = 0; i < size-1; i++) {
-            newStack[i] = currentStack[i];
-        }
+        System.arraycopy(currentStack, 0, newStack, 0, size - 1);
         size--;
         currentStack = newStack;
         return returnValue;
     }
 
     public static void test() {
-        ArrayStack stack = new ArrayStack<Integer>(Integer.class);
+        ArrayStack<Integer> stack = new ArrayStack<>(Integer.class);
         for (int i = 0; i < 10; i++) {
             int toPush = ThreadLocalRandom.current().nextInt();
             System.out.print(toPush + ", ");
