@@ -34,15 +34,21 @@ public class ArrayStack<E> {
         return returnValue;
     }
 
+    public E peek() {
+        if (size == 0) return null;
+        return currentStack[size-1];
+    }
+
     public static void test() {
         ArrayStack<Integer> stack = new ArrayStack<>(Integer.class);
         for (int i = 0; i < 10; i++) {
-            int toPush = ThreadLocalRandom.current().nextInt();
+            int toPush = ThreadLocalRandom.current().nextInt(500);
             System.out.print(toPush + ", ");
             stack.push(toPush);
         }
 
         System.out.println();
+        System.out.println(stack.peek());
 
         for (int i = 0; i < 10; i++) {
             System.out.print(stack.pop() + ", ");
