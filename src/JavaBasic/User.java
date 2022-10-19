@@ -1,8 +1,6 @@
 package JavaBasic;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class User {
@@ -47,7 +45,7 @@ public class User {
 
     public static HashMap<String, User> createRandomUserMap(int amount)
     {
-        HashMap<String, User> UserMap = new HashMap<String, User>();
+        HashMap<String, User> UserMap = new HashMap<>();
         for (int i = 0; i < amount; i++) {
             User user = User.createRandomUser();
             UserMap.put(user.Id, user);
@@ -57,7 +55,7 @@ public class User {
 
     public static User GetUserFromList(List<User> users, String id) {
         for (User current : users) {
-            if (current.Id == id) {
+            if (current.Id.equals(id)) {
                 return current;
             }
         }
@@ -82,5 +80,17 @@ public class User {
         String id = UUID.randomUUID().toString();
         boolean activated = ThreadLocalRandom.current().nextBoolean();
         return new User(name, id, activated);
+    }
+
+    public static void test() {
+        Map<String, User> usersMap = User.createRandomUserMap(10);
+        User tempUser = User.createRandomUser();
+        usersMap.put(tempUser.Id, tempUser);
+        ArrayList<User> usersAsList = new ArrayList<>(usersMap.values());
+        User gotUser = User.GetUserFromList(usersAsList, tempUser.Id);
+        System.out.println(gotUser);
+
+        int amountActivated = User.amountUsersActivated(usersAsList);
+        System.out.println(amountActivated + " Users Activated");
     }
 }
