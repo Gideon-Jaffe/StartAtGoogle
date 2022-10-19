@@ -23,27 +23,30 @@ public class Main {
     public static void printNumbersDivisible_For(int[] numbersToPrint, int divisor) {
         for (int index =0; index < numbersToPrint.length; index++) {
             if (numbersToPrint[index]%divisor == 0) {
-                System.out.println(numbersToPrint[index]);
+                System.out.print(numbersToPrint[index] + " ");
             }
         }
+        System.out.println();
     }
 
     public static void printNumbersDivisible_ForEach(int[] numbersToPrint, int divisor) {
         for (int currentNumber : numbersToPrint) {
             if (currentNumber % divisor == 0) {
-                System.out.println(currentNumber);
+                System.out.print(currentNumber + " ");
             }
         }
+        System.out.println();
     }
 
     public static void printNumbersDivisible_While(int[] numbersToPrint, int divisor) {
         int index = 0;
         while (index < numbersToPrint.length) {
             if (numbersToPrint[index]%divisor == 0) {
-                System.out.println(numbersToPrint[index]);
+                System.out.print(numbersToPrint[index] + " ");
             }
             index++;
         }
+        System.out.println();
     }
 
 }
