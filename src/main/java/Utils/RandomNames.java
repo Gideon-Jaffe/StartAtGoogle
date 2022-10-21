@@ -8,8 +8,6 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class RandomNames {
 
-    //private final Reader reader;
-
     private final JSONArray names;
 
     public RandomNames(String path) {
@@ -24,7 +22,6 @@ public class RandomNames {
         }
 
         names = tempNames;
-        //this.reader = tempReader;
     }
 
     public String getRandomNameFromJsonFile() {

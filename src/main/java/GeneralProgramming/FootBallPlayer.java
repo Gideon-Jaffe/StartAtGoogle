@@ -150,7 +150,7 @@ public class FootBallPlayer {
         return randomNumber;
     }
 
-    public static ArrayList<FootBallPlayer> createRandomTeam(int teamSize, List<Pair<Position, Integer>> requirements, List<Position> restOfTeamInPositions, RandomNames nameGenerator) {
+    private static ArrayList<FootBallPlayer> createRandomTeam_OnlyForTesting(int teamSize, List<Pair<Position, Integer>> requirements, List<Position> restOfTeamInPositions, RandomNames nameGenerator) {
         List<Integer> takenJerseyNumbers = new ArrayList<>();
         ArrayList<FootBallPlayer> team = new ArrayList<>();
         if (requirements != null) {
@@ -195,7 +195,7 @@ public class FootBallPlayer {
         requirements.add(new Pair<>(Position.MIDFIELDER, 2));
         requirements.add(new Pair<>(Position.DEFENDER, 2));
         RandomNames names = new RandomNames("src/main/resources/first_names.json");
-        ArrayList<FootBallPlayer> randomTeam = createRandomTeam(11, requirements, List.of(new Position[]{Position.ATTACKER, Position.MIDFIELDER, Position.DEFENDER}), names);
+        ArrayList<FootBallPlayer> randomTeam = createRandomTeam_OnlyForTesting(11, requirements, List.of(new Position[]{Position.ATTACKER, Position.MIDFIELDER, Position.DEFENDER}), names);
         for (FootBallPlayer player : randomTeam) {
             System.out.println(player);
         }
