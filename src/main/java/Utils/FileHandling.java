@@ -10,7 +10,7 @@ public class FileHandling {
             file.createNewFile();
             return file.exists();
         } catch (IOException e) {
-            throw new RuntimeException("Cant create File");
+            throw new RuntimeException("Cant create File\n" + e);
         }
     }
 }

@@ -67,9 +67,13 @@ public class FootBallPlayer {
     }
 
     public static FootBallPlayer randomFootBallPlayerWithPosition(Position position, List<Integer> takenJerseyNumbers) {
-        FootBallPlayer randomPlayer = new FootBallPlayer();
         RandomNames names = new RandomNames("src/main/resources/first_names.json");
-        randomPlayer.name = names.getRandomName();
+        return randomFootBallPlayerWithPosition(position, takenJerseyNumbers, names);
+    }
+
+    public static FootBallPlayer randomFootBallPlayerWithPosition(Position position, List<Integer> takenJerseyNumbers, RandomNames randomNameGenerator) {
+        FootBallPlayer randomPlayer = new FootBallPlayer();
+        randomPlayer.name = randomNameGenerator.getRandomNameFromJsonFile();
         randomPlayer.grade = ThreadLocalRandom.current().nextFloat() * 100;
         randomPlayer.jerseyNumber = randomAllowedJerseyNumber(takenJerseyNumbers);
 
@@ -89,16 +93,20 @@ public class FootBallPlayer {
         return player;
     }
 
+    public static FootBallPlayer randomFootBallPlayer(List<Position> possiblePositions, List<Integer> takenJerseyNumbers, RandomNames randomNameGenerator) {
+        return randomFootBallPlayerWithPosition(possiblePositions.get(ThreadLocalRandom.current().nextInt(possiblePositions.size())), takenJerseyNumbers, randomNameGenerator);
+    }
+
     public static FootBallPlayer randomFootBallPlayer(List<Position> possiblePositions, List<Integer> takenJerseyNumbers) {
         return randomFootBallPlayerWithPosition(possiblePositions.get(ThreadLocalRandom.current().nextInt(possiblePositions.size())), takenJerseyNumbers);
     }
 
-    public static FootBallPlayer createRandomGoalkeeper() {
-        return randomFootBallPlayerWithPosition(Position.GOAL_KEEPER, null);
-    }
-
     public static FootBallPlayer randomFootBallPlayer() {
         return randomFootBallPlayer(List.of(Position.values()), null);
+    }
+
+    public static FootBallPlayer createRandomGoalkeeper() {
+        return randomFootBallPlayerWithPosition(Position.GOAL_KEEPER, null);
     }
 
     private static Integer randomAllowedJerseyNumber(List<Integer> takenJerseyNumbers) {

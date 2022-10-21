@@ -28,33 +28,34 @@ public class Team {
         this.players = players;
     }
 
-    public Team(String name, List<FootBallPlayer> players) {
+    public Team(String name) {
         this.name = name;
-        this.players = players;
+        this.players = null;
     }
 
-    public static Team createRandomTeamWithTeamSize(int teamSize, List<Pair<FootBallPlayer.Position, Integer>> requirements, List<FootBallPlayer.Position> restOfTeamInPositions) {
+    public static Team createRandomTeamWithTeamSizeAndPositionRequirements(int teamSize, List<Pair<FootBallPlayer.Position, Integer>> requirements, List<FootBallPlayer.Position> restOfTeamInPositions) {
         checkAndFixTeamRequirements(teamSize, requirements);
-        Team currentTeam = new Team(RandomNames.getRandomFirstName("src/main/resources/first_names.json"), null);
+        RandomNames firstNames = new RandomNames("src/main/resources/first_names.json");
+        Team currentTeam = new Team(firstNames.getRandomNameFromJsonFile());
         currentTeam.players = FootBallPlayer.createRandomTeam(teamSize, requirements, restOfTeamInPositions);
         return currentTeam;
     }
 
-    public static Team createRandomTeam(List<Pair<FootBallPlayer.Position, Integer>> requirements) {
+    public static Team createRandomTeamWithPositionRequirements(List<Pair<FootBallPlayer.Position, Integer>> requirements) {
         int teamSize = 0;
         for (Pair<FootBallPlayer.Position, Integer> req : requirements) {
             teamSize += req.getValue();
         }
-        return createRandomTeamWithTeamSize(teamSize, requirements, null);
+        return createRandomTeamWithTeamSizeAndPositionRequirements(teamSize, requirements, null);
     }
 
-    public static Team createRandomTeam(int Defence, int MiddleField, int Attack) {
+    public static Team createRandomTeamWithPositionRequirements(int Defence, int MiddleField, int Attack) {
         List<Pair<FootBallPlayer.Position, Integer>> requirements = new ArrayList<>();
         requirements.add(new Pair<>(FootBallPlayer.Position.GOAL_KEEPER, 1));
         requirements.add(new Pair<>(FootBallPlayer.Position.ATTACKER, Attack));
         requirements.add(new Pair<>(FootBallPlayer.Position.MIDFIELDER, MiddleField));
         requirements.add(new Pair<>(FootBallPlayer.Position.DEFENDER, Defence));
-        return createRandomTeam(requirements);
+        return createRandomTeamWithPositionRequirements(requirements);
     }
 
     @Override
@@ -67,11 +68,11 @@ public class Team {
     }
 
     public void toFile(String path) {
-        if (!FileHandling.tryCreateFile(path)) throw new RuntimeException("can't create file");
-        try(Writer writer = new FileWriter(path)) {
+        if (!FileHandling.tryCreateFile(path + "team.txt")) throw new RuntimeException("can't create file");
+        try(Writer writer = new FileWriter(path + "team.txt")) {
             writer.write(this.toString());
         } catch (IOException e) {
-            throw new RuntimeException("Couldn't write to file");
+            throw new RuntimeException("Couldn't write to file\n" + e);
         }
     }
 

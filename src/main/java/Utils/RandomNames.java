@@ -3,33 +3,38 @@ package Utils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONValue;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.Reader;
+import java.io.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class RandomNames {
 
-    private Reader reader;
-    private JSONArray names;
+    private final Reader reader;
 
     public RandomNames(String path) {
-        try (Reader fileReader = new FileReader(path)) {
-            this.reader = fileReader;
-            this.names = (JSONArray) JSONValue.parse(reader);
+        Reader tempReader = null;
+        try {
+            tempReader = new FileReader(path);
         } catch (FileNotFoundException e) {
             System.out.println("Name file not found");
-        } catch (IOException e) {
-            System.out.println("IO Error");
         }
+
+        this.reader = tempReader;
     }
 
-    public String getRandomName() {
+    public String getRandomNameFromJsonFile() {
+        if (this.reader == null) return "";
+        JSONArray names = (JSONArray) JSONValue.parse(reader);
         return (String) names.get(ThreadLocalRandom.current().nextInt(names.size()));
     }
 
-    public static String getRandomFirstName(String path) {
+    public void close() {
+        try {
+            this.reader.close();
+        } catch (IOException e) {
+            System.out.println("The File was already closed");
+        }
+    }
+    /* public static String getRandomFirstName(String path) {
         try (Reader reader = new FileReader(path)) {
             JSONArray names = (JSONArray) JSONValue.parse(reader);
             return (String) names.get(ThreadLocalRandom.current().nextInt(names.size()));
@@ -39,5 +44,5 @@ public class RandomNames {
             System.out.println("IO Error");
         }
         return null;
-    }
+    }*/
 }
