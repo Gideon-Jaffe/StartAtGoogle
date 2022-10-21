@@ -8,41 +8,27 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class RandomNames {
 
-    private final Reader reader;
+    //private final Reader reader;
+
+    private final JSONArray names;
 
     public RandomNames(String path) {
-        Reader tempReader = null;
-        try {
-            tempReader = new FileReader(path);
+        JSONArray tempNames;
+        try (Reader tempReader = new FileReader(path)) {
+
+            tempNames = (JSONArray) JSONValue.parse(tempReader);
         } catch (FileNotFoundException e) {
-            System.out.println("Name file not found");
+            throw new RuntimeException(path + " not found");
+        } catch (IOException e) {
+            throw new RuntimeException("IO Error in opening " + path);
         }
 
-        this.reader = tempReader;
+        names = tempNames;
+        //this.reader = tempReader;
     }
 
     public String getRandomNameFromJsonFile() {
-        if (this.reader == null) return "";
-        JSONArray names = (JSONArray) JSONValue.parse(reader);
+        if (names == null) return "";
         return (String) names.get(ThreadLocalRandom.current().nextInt(names.size()));
     }
-
-    public void close() {
-        try {
-            this.reader.close();
-        } catch (IOException e) {
-            System.out.println("The File was already closed");
-        }
-    }
-    /* public static String getRandomFirstName(String path) {
-        try (Reader reader = new FileReader(path)) {
-            JSONArray names = (JSONArray) JSONValue.parse(reader);
-            return (String) names.get(ThreadLocalRandom.current().nextInt(names.size()));
-        } catch (FileNotFoundException e) {
-            System.out.println("Name file not found");
-        } catch (IOException e) {
-            System.out.println("IO Error");
-        }
-        return null;
-    }*/
 }

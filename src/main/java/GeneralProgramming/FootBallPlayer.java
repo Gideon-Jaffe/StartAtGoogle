@@ -66,39 +66,59 @@ public class FootBallPlayer {
         return name + " No: " + jerseyNumber + " Grade: " + grade + " Position: " + position;
     }
 
-    public static FootBallPlayer randomFootBallPlayerWithPosition(Position position, List<Integer> takenJerseyNumbers) {
+    public static FootBallPlayer createFootBallPlayerWithRandomGrade(Position position, int jerseyNumber, String name) {
+        FootBallPlayer randomPlayer = new FootBallPlayer();
+        randomPlayer.name = name;
+        randomPlayer.jerseyNumber = jerseyNumber;
+        randomPlayer.position = position;
+        randomPlayer.grade = ThreadLocalRandom.current().nextFloat() * 100;
+        return randomPlayer;
+    }
+
+    public static FootBallPlayer createFootBallPlayerWithRandomGradeAndName(Position position, int jerseyNumber, RandomNames nameGenerator) {
+        FootBallPlayer randomPlayer = new FootBallPlayer();
+        randomPlayer.name = nameGenerator.getRandomNameFromJsonFile();
+        randomPlayer.jerseyNumber = jerseyNumber;
+        randomPlayer.position = position;
+        randomPlayer.grade = ThreadLocalRandom.current().nextFloat() * 100;
+        return randomPlayer;
+    }
+
+    public static FootBallPlayer createFootBallPlayerWithRandomGradeAndName(Position position, int jerseyNumber) {
         RandomNames names = new RandomNames("src/main/resources/first_names.json");
-        return randomFootBallPlayerWithPosition(position, takenJerseyNumbers, names);
+        return createFootBallPlayerWithRandomGradeAndName(position, jerseyNumber, names);
+    }
+
+    public static FootBallPlayer randomFootBallPlayerWithPosition(Position position, List<Integer> takenJerseyNumbers) {
+        return createFootBallPlayerWithRandomGradeAndName(position, randomAllowedJerseyNumber(takenJerseyNumbers));
     }
 
     public static FootBallPlayer randomFootBallPlayerWithPosition(Position position, List<Integer> takenJerseyNumbers, RandomNames randomNameGenerator) {
-        FootBallPlayer randomPlayer = new FootBallPlayer();
-        randomPlayer.name = randomNameGenerator.getRandomNameFromJsonFile();
-        randomPlayer.grade = ThreadLocalRandom.current().nextFloat() * 100;
-        randomPlayer.jerseyNumber = randomAllowedJerseyNumber(takenJerseyNumbers);
-
-        if (position == null) {
-            randomPlayer.position = getRandomPosition();
-        } else {
-            randomPlayer.position = position;
-        }
-        return randomPlayer;
+        return createFootBallPlayerWithRandomGradeAndName(position, randomAllowedJerseyNumber(takenJerseyNumbers), randomNameGenerator);
     }
 
     public static FootBallPlayer randomFootBallPlayerWithJerseyNumber(int jerseyNumber, List<Integer> takenJerseyNumbers) {
         if (takenJerseyNumbers != null && takenJerseyNumbers.contains(jerseyNumber))
             throw new RuntimeException("Jersey number Taken!");
-        FootBallPlayer player = randomFootBallPlayer();
-        player.jerseyNumber = jerseyNumber;
-        return player;
+        return createFootBallPlayerWithRandomGradeAndName(getRandomPosition(), jerseyNumber);
+    }
+
+    public static FootBallPlayer randomFootBallPlayerWithJerseyNumber(int jerseyNumber, List<Integer> takenJerseyNumbers, RandomNames randomNameGenerator) {
+        if (takenJerseyNumbers != null && takenJerseyNumbers.contains(jerseyNumber))
+            throw new RuntimeException("Jersey number Taken!");
+        return createFootBallPlayerWithRandomGradeAndName(getRandomPosition(), jerseyNumber, randomNameGenerator);
     }
 
     public static FootBallPlayer randomFootBallPlayer(List<Position> possiblePositions, List<Integer> takenJerseyNumbers, RandomNames randomNameGenerator) {
-        return randomFootBallPlayerWithPosition(possiblePositions.get(ThreadLocalRandom.current().nextInt(possiblePositions.size())), takenJerseyNumbers, randomNameGenerator);
+        return randomFootBallPlayerWithPosition(getRandomPositionFromList(possiblePositions), takenJerseyNumbers, randomNameGenerator);
     }
 
     public static FootBallPlayer randomFootBallPlayer(List<Position> possiblePositions, List<Integer> takenJerseyNumbers) {
-        return randomFootBallPlayerWithPosition(possiblePositions.get(ThreadLocalRandom.current().nextInt(possiblePositions.size())), takenJerseyNumbers);
+        return randomFootBallPlayerWithPosition(getRandomPositionFromList(possiblePositions), takenJerseyNumbers);
+    }
+
+    public static FootBallPlayer randomFootBallPlayer(RandomNames randomNameGenerator) {
+        return randomFootBallPlayer(List.of(Position.values()), null, randomNameGenerator);
     }
 
     public static FootBallPlayer randomFootBallPlayer() {
@@ -130,13 +150,13 @@ public class FootBallPlayer {
         return randomNumber;
     }
 
-    public static ArrayList<FootBallPlayer> createRandomTeam(int teamSize, List<Pair<Position, Integer>> requirements, List<Position> restOfTeamInPositions) {
+    public static ArrayList<FootBallPlayer> createRandomTeam(int teamSize, List<Pair<Position, Integer>> requirements, List<Position> restOfTeamInPositions, RandomNames nameGenerator) {
         List<Integer> takenJerseyNumbers = new ArrayList<>();
         ArrayList<FootBallPlayer> team = new ArrayList<>();
         if (requirements != null) {
             for (Pair<Position, Integer> amountPerPosition : requirements) {
                 for (int i = 0; i < amountPerPosition.getValue(); i++) {
-                    FootBallPlayer randomPlayer = randomFootBallPlayerWithPosition(amountPerPosition.getKey(), takenJerseyNumbers);
+                    FootBallPlayer randomPlayer = randomFootBallPlayerWithPosition(amountPerPosition.getKey(), takenJerseyNumbers, nameGenerator);
                     team.add(randomPlayer);
                     takenJerseyNumbers.add(randomPlayer.jerseyNumber);
                     teamSize--;
@@ -164,13 +184,18 @@ public class FootBallPlayer {
         return positions[ThreadLocalRandom.current().nextInt(1, positions.length)];
     }
 
+    public static Position getRandomPositionFromList(List<Position> positionsAvailable) {
+        return positionsAvailable.get(ThreadLocalRandom.current().nextInt(1, positionsAvailable.size()));
+    }
+
     public static void test() {
         ArrayList<Pair<Position, Integer>> requirements = new ArrayList<>();
         requirements.add(new Pair<>(Position.GOAL_KEEPER, 1));
         requirements.add(new Pair<>(Position.ATTACKER, 2));
         requirements.add(new Pair<>(Position.MIDFIELDER, 2));
         requirements.add(new Pair<>(Position.DEFENDER, 2));
-        ArrayList<FootBallPlayer> randomTeam = createRandomTeam(11, requirements, List.of(new Position[]{Position.ATTACKER, Position.MIDFIELDER, Position.DEFENDER}));
+        RandomNames names = new RandomNames("src/main/resources/first_names.json");
+        ArrayList<FootBallPlayer> randomTeam = createRandomTeam(11, requirements, List.of(new Position[]{Position.ATTACKER, Position.MIDFIELDER, Position.DEFENDER}), names);
         for (FootBallPlayer player : randomTeam) {
             System.out.println(player);
         }
