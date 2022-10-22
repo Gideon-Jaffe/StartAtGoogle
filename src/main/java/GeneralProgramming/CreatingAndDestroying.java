@@ -4,7 +4,13 @@ import java.io.*;
 
 public class CreatingAndDestroying {
     public static void main(String[] args) {
-        writeLinesContaining("src/main/resources/textFile.txt", "src/main/resources/newText.txt", "story");
+        boolean success = writeLinesContaining("src/main/resources/textFile.txt", "src/main/resources/newText.txt", "story");
+        if (success) {
+            System.out.println("Successfully transferred lines that have the checker");
+        }
+        else {
+            System.out.println("Error transferring lines");
+        }
     }
 
     public static boolean writeLinesContaining(String inFile, String outFile, String checker) {
