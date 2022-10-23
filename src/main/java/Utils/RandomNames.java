@@ -13,7 +13,6 @@ public class RandomNames {
     public RandomNames(String path) {
         JSONArray tempNames;
         try (Reader tempReader = new FileReader(path)) {
-
             tempNames = (JSONArray) JSONValue.parse(tempReader);
         } catch (FileNotFoundException e) {
             throw new RuntimeException(path + " not found");
