@@ -1,10 +1,10 @@
 package Week2.Farm.Farmer;
 
-public class AnimalForwarding implements Animal {
+class AnimalForwarding implements Animal {
 
     Animal myAnimal;
 
-    public AnimalForwarding(Animal myAnimal) {
+    AnimalForwarding(Animal myAnimal) {
         this.myAnimal = myAnimal;
     }
 

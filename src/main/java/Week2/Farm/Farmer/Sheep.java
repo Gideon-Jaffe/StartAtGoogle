@@ -5,7 +5,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 class Sheep extends BaseAnimal {
 
-    public Sheep(Gender gender, int id, float weight) {
+    Sheep(Gender gender, int id, float weight) {
         super(gender, id, weight);
     }
 
@@ -24,11 +24,11 @@ class Sheep extends BaseAnimal {
         }
     }
 
-    public static Animal createRandomSheep() {
+    static Animal createRandomSheep() {
         return new Sheep(Gender.values()[ThreadLocalRandom.current().nextInt(Gender.values().length)], UUID.randomUUID().hashCode(), ThreadLocalRandom.current().nextFloat()*50);
     }
 
-    public static Animal createRandomSheepWithGender(Gender gender) {
+    static Animal createRandomSheepWithGender(Gender gender) {
         return new Sheep(gender, UUID.randomUUID().hashCode(), ThreadLocalRandom.current().nextFloat()*50);
     }
 }

@@ -1,15 +1,19 @@
 package Week2.Farm.Farmer;
 
-public class AnimalCountingMoves extends AnimalForwarding {
+class AnimalCountingMoves extends AnimalForwarding {
 
     private int counter = 0;
 
-    public AnimalCountingMoves(Animal myAnimal) {
+    AnimalCountingMoves(Animal myAnimal) {
         super(myAnimal);
     }
 
-    public int getCounter() {
+    int getCounter() {
         return counter;
+    }
+
+    void resetCounter() {
+        counter = 0;
     }
 
     @Override

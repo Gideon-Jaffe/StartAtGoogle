@@ -6,11 +6,11 @@ import java.util.List;
 class Farm {
     private final List<Animal> animals;
 
-    public Farm() {
+    Farm() {
         animals = new ArrayList<>();
     }
 
-    public Animal acquire (AnimalTypes typeToCreate, Gender gender) {
+    Animal acquire (AnimalTypes typeToCreate, Gender gender) {
         Animal acquiredAnimal = null;
         switch (typeToCreate) {
             case Cow:
@@ -29,7 +29,7 @@ class Farm {
         return acquiredAnimal;
     }
 
-    public Animal acquireMoveCountingAnimal(AnimalTypes typeToCreate, Gender gender) {
+    Animal acquireMoveCountingAnimal(AnimalTypes typeToCreate, Gender gender) {
         Animal acquiredAnimal = null;
         switch (typeToCreate) {
             case Cow:
@@ -49,7 +49,7 @@ class Farm {
         return acquiredAnimal;
     }
 
-    public Animal requestAnimal(AnimalTypes animalType) {
+    Animal requestAnimal(AnimalTypes animalType) {
         for (Animal current : animals) {
             boolean found = false;
             switch (animalType) {
@@ -71,7 +71,7 @@ class Farm {
         return null;
     }
 
-    public Animal mate(AnimalTypes animalType) {
+    Animal mate(AnimalTypes animalType) {
         List<Animal> matingPair = new ArrayList<Animal>();
         for (Animal animal : animals) {
             switch (animalType) {
@@ -90,13 +90,13 @@ class Farm {
         return mate(matingPair.get(0), matingPair.get(1));
     }
 
-    public Animal mate(Animal animal1, Animal animal2) {
+    Animal mate(Animal animal1, Animal animal2) {
         Animal baby = animal1.mate(animal2);
         animals.add(baby);
         return baby;
     }
 
-    public Animal getAnimal(AnimalTypes animalType) {
+    Animal getAnimal(AnimalTypes animalType) {
         for (Animal animal : animals) {
             switch (animalType) {
                 case Cow:

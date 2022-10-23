@@ -1,13 +1,13 @@
 package Week2.Farm.Farmer;
 
-public abstract class BaseAnimal implements Animal {
+abstract class BaseAnimal implements Animal {
     private final Gender gender;
 
     private final int id;
 
     private float weight;
 
-    public BaseAnimal(Gender gender, int id, float weight) {
+    BaseAnimal(Gender gender, int id, float weight) {
         this.gender = gender;
         this.id = id;
         this.weight = weight;

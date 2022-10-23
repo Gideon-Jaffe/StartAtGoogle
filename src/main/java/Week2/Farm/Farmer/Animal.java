@@ -1,6 +1,6 @@
 package Week2.Farm.Farmer;
 
-public interface Animal {
+interface Animal {
     void move();
 
     Gender getGender();

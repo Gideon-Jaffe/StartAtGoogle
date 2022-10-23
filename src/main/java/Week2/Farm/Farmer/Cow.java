@@ -5,7 +5,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 class Cow extends BaseAnimal {
 
-    public Cow(Gender gender, int id, float weight) {
+    Cow(Gender gender, int id, float weight) {
         super(gender, id, weight);
     }
 
@@ -24,11 +24,11 @@ class Cow extends BaseAnimal {
         }
     }
 
-    public static Animal createRandomCow() {
+    static Animal createRandomCow() {
         return new Cow(Gender.values()[ThreadLocalRandom.current().nextInt(Gender.values().length)], Math.abs(UUID.randomUUID().hashCode()), ThreadLocalRandom.current().nextFloat()*50);
     }
 
-    public static Animal createRandomCowWithGender(Gender gender) {
+    static Animal createRandomCowWithGender(Gender gender) {
         return new Cow(gender, Math.abs(UUID.randomUUID().hashCode()), ThreadLocalRandom.current().nextFloat()*50);
     }
 }
