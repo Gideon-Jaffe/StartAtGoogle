@@ -10,7 +10,7 @@ class Farm {
         animals = new ArrayList<>();
     }
 
-    public Animal acquire (AnimalTypes typeToCreate, Animal.Gender gender) {
+    public Animal acquire (AnimalTypes typeToCreate, Gender gender) {
         Animal acquiredAnimal = null;
         switch (typeToCreate) {
             case Cow:
@@ -29,7 +29,7 @@ class Farm {
         return acquiredAnimal;
     }
 
-    public Animal acquireMoveCountingAnimal(AnimalTypes typeToCreate, Animal.Gender gender) {
+    public Animal acquireMoveCountingAnimal(AnimalTypes typeToCreate, Gender gender) {
         Animal acquiredAnimal = null;
         switch (typeToCreate) {
             case Cow:

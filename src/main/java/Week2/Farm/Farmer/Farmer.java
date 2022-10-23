@@ -24,11 +24,11 @@ public class Farmer {
         return "Farmer Is Awesome:\n" + farm;
     }
 
-    public Animal acquire(AnimalTypes animalClass, Animal.Gender gender) {
+    public Animal acquire(AnimalTypes animalClass, Gender gender) {
         return farm.acquire(animalClass, gender);
     }
 
-    public Animal acquireRandomForwardingAnimal(AnimalTypes animalClass, Animal.Gender gender) {
+    public Animal acquireRandomForwardingAnimal(AnimalTypes animalClass, Gender gender) {
         return farm.acquireMoveCountingAnimal(animalClass, gender);
     }
 

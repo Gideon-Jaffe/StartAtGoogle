@@ -10,10 +10,10 @@ public class Main {
 
     public static void checkFarmFunctionality() {
         Farmer myFarmer = new Farmer();
-        myFarmer.acquire(AnimalTypes.Cow, Animal.Gender.Female);
-        myFarmer.acquire(AnimalTypes.Sheep, Animal.Gender.Male);
-        myFarmer.acquire(AnimalTypes.Horse, Animal.Gender.Female);
-        myFarmer.acquire(AnimalTypes.Horse, Animal.Gender.Male);
+        myFarmer.acquire(AnimalTypes.Cow, Gender.Female);
+        myFarmer.acquire(AnimalTypes.Sheep, Gender.Male);
+        myFarmer.acquire(AnimalTypes.Horse, Gender.Female);
+        myFarmer.acquire(AnimalTypes.Horse, Gender.Male);
         myFarmer.requestAnimal(AnimalTypes.Cow);
         System.out.println("Moving Sheep");
         myFarmer.moveAnimal(AnimalTypes.Sheep);
@@ -28,7 +28,7 @@ public class Main {
 
     public static void checkForwarding() {
         Farmer myFarmer = new Farmer();
-        myFarmer.acquireRandomForwardingAnimal(AnimalTypes.Horse, Animal.Gender.Male);
+        myFarmer.acquireRandomForwardingAnimal(AnimalTypes.Horse, Gender.Male);
         for (int i = 0; i < 5; i++) {
             myFarmer.moveAnimal(AnimalTypes.Horse);
         }

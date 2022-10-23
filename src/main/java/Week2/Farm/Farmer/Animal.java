@@ -9,10 +9,5 @@ public interface Animal {
 
     void setWeight(float newWeight);
     Animal mate(Animal partner);
-
-    enum Gender {
-        Male,
-        Female
-    }
 }
 
