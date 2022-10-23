@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PhoneBook {
-    private List<Contact> contacts;
+    private final List<Contact> contacts;
 
     private final String name;
 
