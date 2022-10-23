@@ -28,6 +28,10 @@ public class Farmer {
         return farm.acquire(animalClass, gender);
     }
 
+    public Animal acquireRandomForwardingAnimal(AnimalTypes animalClass, Animal.Gender gender) {
+        return farm.acquireMoveCountingAnimal(animalClass, gender);
+    }
+
     public void mate(AnimalTypes animalClass) {
         farm.mate(animalClass);
     }

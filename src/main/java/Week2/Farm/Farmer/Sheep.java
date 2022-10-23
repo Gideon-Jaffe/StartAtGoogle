@@ -11,7 +11,7 @@ class Sheep extends BaseAnimal {
 
     @Override
     public void move() {
-        System.out.println("bahhh, Sheep is moving");
+        System.out.println("baaaa, Sheep is moving");
     }
 
     @Override

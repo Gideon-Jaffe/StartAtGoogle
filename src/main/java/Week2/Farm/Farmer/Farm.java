@@ -29,14 +29,24 @@ class Farm {
         return acquiredAnimal;
     }
 
-    public <T extends BaseAnimal> Animal requestAnimal(Class<T> animalClass) {
-        for (Animal current : animals) {
-            if (current.getClass().equals(animalClass)) {
-                animals.remove(current);
-                return current;
-            }
+    public Animal acquireMoveCountingAnimal(AnimalTypes typeToCreate, Animal.Gender gender) {
+        Animal acquiredAnimal = null;
+        switch (typeToCreate) {
+            case Cow:
+                acquiredAnimal = Cow.createRandomCowWithGender(gender);
+                break;
+            case Sheep:
+                acquiredAnimal = Sheep.createRandomSheepWithGender(gender);
+                break;
+            case Horse:
+                acquiredAnimal = Horse.createRandomHorseWithGender(gender);
+                break;
+            default:
+                throw new RuntimeException("Not supported animal type");
         }
-        throw new RuntimeException("Animal not in farm");
+
+        animals.add(new AnimalCountingMoves(acquiredAnimal));
+        return acquiredAnimal;
     }
 
     public Animal requestAnimal(AnimalTypes animalType) {
@@ -90,14 +100,19 @@ class Farm {
         for (Animal animal : animals) {
             switch (animalType) {
                 case Cow:
-                    if (animal instanceof Cow) return animal;
+                    if (animal instanceof Cow || getInnerOfCountingAnimal(animal) instanceof Cow) return animal;
                 case Sheep:
-                    if (animal instanceof Sheep) return animal;
+                    if (animal instanceof Sheep || getInnerOfCountingAnimal(animal) instanceof Sheep) return animal;
                 case Horse:
-                    if (animal instanceof Horse) return animal;
+                    if (animal instanceof Horse || getInnerOfCountingAnimal(animal) instanceof Horse) return animal;
             }
         }
         throw new RuntimeException("Animal not in farm");
+    }
+
+    private Animal getInnerOfCountingAnimal(Animal animal) {
+        if (animal instanceof AnimalCountingMoves) return ((AnimalCountingMoves) animal).myAnimal;
+        else return null;
     }
 
     @Override

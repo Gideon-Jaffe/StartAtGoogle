@@ -11,7 +11,7 @@ class Horse extends BaseAnimal {
 
     @Override
     public void move() {
-        System.out.println("gallop, Horse is moving");
+        System.out.println("neigh, Horse is moving");
     }
 
     @Override
