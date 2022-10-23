@@ -28,5 +28,10 @@ public class RandomNames {
         if (names == null) return "";
         return (String) names.get(ThreadLocalRandom.current().nextInt(names.size()));
     }
+
+    public boolean isNameInJsonFile(String name) {
+        if (names == null) return false;
+        return names.contains(name);
+    }
 }
 
