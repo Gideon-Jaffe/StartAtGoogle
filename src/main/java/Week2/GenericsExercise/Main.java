@@ -13,19 +13,20 @@ public class Main {
         System.out.println(retry(myCounter, 40));
     }
 
-    public static <T> T retry(Callable<T> action, T expectedResult,int numberOfRetries, int sleepBetweenTries) {
+    public static <T> T retry(Callable<T> action, T expectedResult, int numberOfRetries, int sleepBetweenTries) {
         T lastResult = null;
         try {
             while (numberOfRetries > 0) {
                 lastResult = action.call();
                 if (lastResult == expectedResult) {
                     return lastResult;
-                }
-                else {
+                } else {
                     Thread.sleep(sleepBetweenTries);
                     numberOfRetries--;
                 }
             }
+        } catch (InterruptedException e) {
+            throw new RuntimeException("Failed to sleep in between calls", e);
         } catch (Exception e) {
             throw new RuntimeException("Failed to call T.call", e);
         }
