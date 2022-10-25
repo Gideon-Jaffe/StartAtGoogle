@@ -1,8 +1,5 @@
 package Week2.Store.StoreAndUser;
 
-import com.sun.jdi.Method;
-
-import java.time.Month;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -24,7 +21,7 @@ public class Store {
         }
     }
 
-    public boolean useCoupon(User user, Coupon coupon) {
+    public boolean useCoupon(Coupon coupon) {
         if (isCouponLegal(coupon)) {
             System.out.println("Used Coupon: " + coupon);
             return true;

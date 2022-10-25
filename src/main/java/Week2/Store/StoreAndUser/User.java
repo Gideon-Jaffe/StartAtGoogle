@@ -45,7 +45,7 @@ public class User {
         if (hasNoCoupons()) return OptionalDouble.empty();
 
         Coupon match = coupons.get(ThreadLocalRandom.current().nextInt(coupons.size()));
-        if (store.useCoupon(this, match)) {
+        if (store.useCoupon(match)) {
             coupons.remove(match);
             return OptionalDouble.of(match.getValue());
         } else {
@@ -54,7 +54,7 @@ public class User {
     }
 
     private OptionalDouble useCouponAtStore(Store store, Coupon match) {
-        if (store.useCoupon(this, match)) {
+        if (store.useCoupon(match)) {
             coupons.remove(match);
             return OptionalDouble.of(match.getValue());
         } else {
