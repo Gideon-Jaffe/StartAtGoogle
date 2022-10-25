@@ -1,7 +1,5 @@
 package Week2.ExceptionExercise;
 
-import Utils.FileHandling;
-
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -15,7 +13,6 @@ public class ReadConfigFile {
     Map<String, String> config;
 
     public ReadConfigFile(String path) {
-        //this.config = new HashMap<>();
         readConfig(path);
     }
 
