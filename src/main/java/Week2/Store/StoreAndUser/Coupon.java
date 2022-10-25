@@ -6,9 +6,9 @@ import java.util.UUID;
 class Coupon implements Comparable<Coupon> {
     final private UUID id;
 
-    private Date expiryDate;
+    final private Date expiryDate;
 
-    private double value;
+    private final double value;
 
     Coupon(Date expiryDate, double value) {
         this.id = UUID.randomUUID();
@@ -16,19 +16,15 @@ class Coupon implements Comparable<Coupon> {
         this.value = value;
     }
 
-    public UUID getId() {
+    UUID getId() {
         return new UUID(this.id.getMostSignificantBits(), this.id.getLeastSignificantBits());
     }
 
-    public Date getExpiryDate() {
-        return expiryDate;
+    Date getExpiryDate() {
+        return (Date) expiryDate.clone();
     }
 
-    void setExpiryDate(Date newDate) {
-        expiryDate = newDate;
-    }
-
-    public double getValue() {
+    double getValue() {
         return value;
     }
 
