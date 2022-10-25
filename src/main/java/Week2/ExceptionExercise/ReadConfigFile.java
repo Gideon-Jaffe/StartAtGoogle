@@ -9,11 +9,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-public class readConfigFile {
+public class ReadConfigFile {
     Map<String, String> config;
 
-    public readConfigFile(String path) {
+    public ReadConfigFile(String path) throws IOException {
         this.config = new HashMap<>();
+        readConfig(path);
+    }
+
+    private void readConfig(String path) throws IOException {
         try (FileReader reader = new FileReader(path)) {
             Properties prop = new Properties();
             prop.load(reader);
@@ -24,13 +28,20 @@ public class readConfigFile {
             System.out.println("File not found, creating new config file");
             createConfigFile(path);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new IOException("Failed in function readConfig\n" + e);
         }
     }
 
-    private void createConfigFile(String path) {
+    private void createConfigFile(String path) throws IOException {
         if (!FileHandling.tryCreateFile(path)) {
-            throw new RuntimeException("Cant create file");
+            throw new IOException("Cant create file");
         }
+        readConfig(path);
+    }
+
+    public String getConfiguration(String configName) throws IllegalStateException {
+        if (config == null) throw new IllegalStateException();
+        if (!config.containsKey(configName)) throw new IllegalArgumentException();
+        return config.get(configName);
     }
 }
