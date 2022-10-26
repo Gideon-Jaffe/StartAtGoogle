@@ -1,25 +1,53 @@
 package Week2.ExceptionExercise;
 
+import java.io.IOException;
 import java.util.Optional;
 
 public class Main {
     public static void main(String[] args) {
-        ReadConfigFile con = new ReadConfigFile("config.properties");
+        ReadConfigFile con = new ReadConfigFile();
 
-        String config1 = "config1";
-        String config2 = "ooblah";
-        Optional<String> gottenConfig1 = con.getConfiguration(config1);
-        if (gottenConfig1.isPresent()) {
-            System.out.println(gottenConfig1.get());
-        } else {
-            System.out.println(config1 + " configuration does not exist");
+        String car = "car";
+        System.out.println("---------- Trying to get car property before initializing ----------");
+        try {
+            String gottenConfig1 = con.getConfiguration(car);
+            System.out.println("name value is " + gottenConfig1);
+        } catch (IllegalStateException e) {
+            System.out.println(e);
         }
 
-        Optional<String> gottenConfig2 = con.getConfiguration(config2);
-        if (gottenConfig2.isPresent()) {
-            System.out.println(gottenConfig2.get());
-        } else {
-            System.out.println(config2 + " configuration does not exist");
+        System.out.println("\n---------- Trying to initialize map with text file ----------");
+        try {
+            con.initializeConfig("my_config_file.txt");
+        } catch (IllegalArgumentException e) {
+            System.out.println(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        System.out.println("\n---------- Trying to initialize map with json file ----------");
+        try {
+            con.initializeConfig("my_config_file.json");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        String config1 = "name";
+        String config2 = "ooblah";
+        System.out.println("\n---------- Trying to get name property ----------");
+        try {
+            String gottenConfig1 = con.getConfiguration(config1);
+            System.out.println("name value is " + gottenConfig1);
+        } catch (IllegalArgumentException e) {
+            System.out.println(e);
+        }
+
+        System.out.println("\n---------- Trying to get ooblah property ----------");
+        try {
+            String gottenConfig2 = con.getConfiguration(config2);
+            System.out.println("name value is " + gottenConfig2);
+        } catch (IllegalArgumentException e) {
+            System.out.println(e);
         }
     }
 }

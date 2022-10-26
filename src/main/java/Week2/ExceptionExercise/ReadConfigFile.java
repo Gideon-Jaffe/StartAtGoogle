@@ -1,55 +1,52 @@
 package Week2.ExceptionExercise;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.HashMap;
+import java.lang.reflect.Type;
 import java.util.Map;
-import java.util.Optional;
-import java.util.Properties;
 
 public class ReadConfigFile {
     Map<String, String> config;
 
-    public ReadConfigFile(String path) {
-        readConfig(path);
+    public ReadConfigFile() {
     }
 
-    private void readConfig(String path){
+    public void initializeConfig(String path) throws IllegalArgumentException, IOException {
+        checkFileType(path);
         try (FileReader reader = new FileReader(path)) {
-            Properties prop = new Properties();
-            prop.load(reader);
-            config = new HashMap<>();
-            for (Map.Entry<Object, Object> entry : prop.entrySet()) {
-                this.config.put(String.valueOf(entry.getKey()), String.valueOf(entry.getValue()));
-            }
+            Gson gson = new Gson();
+            Type stringStringMap = new TypeToken<Map<String, String>>(){}.getType();
+            config = gson.fromJson(reader,stringStringMap);
         } catch (FileNotFoundException e) {
             System.out.println("File not found, creating new config file");
             createConfigFile(path);
-        } catch (IOException e) {
-            System.out.println("Failed to read config file\n");
         }
     }
 
-    private void createConfigFile(String path){
-        try (FileWriter writer = new FileWriter(path)) {
-            writer.write("config1=this is config 1\n" +
-                    "config2=this is config 2");
+    private void createConfigFile(String path) throws IOException{
+        FileWriter writer = new FileWriter(path);
+            writer.write("{\"name\":\"John\", \"age\":\"30\", \"car\":\"Awesome\"}");
             writer.close();
-            readConfig(path);
-        } catch (IOException e) {
-            System.out.println("Cant create file, Map remained null");
-        }
+            initializeConfig(path);
     }
 
-    public Optional<String> getConfiguration(String configName) {
-        try {
-            checkIfInConfig(configName);
-            return Optional.of(config.get(configName));
-        } catch (IllegalArgumentException | NullPointerException e) {
-            return Optional.empty();
-        }
+    public String getConfiguration(String configName) throws IllegalStateException, IllegalArgumentException {
+        checkIfInitialized();
+        checkIfInConfig(configName);
+        return config.get(configName);
+    }
+
+    private void checkFileType(String path) throws IllegalArgumentException {
+        if (!path.substring(path.lastIndexOf('.')).equals(".json")) throw new IllegalArgumentException("File not ending with .json");
+    }
+
+    private void checkIfInitialized() throws IllegalStateException {
+        if (config == null) throw new IllegalStateException("Map not initialized");
     }
 
     private void checkIfInConfig(String configName) throws IllegalArgumentException {
