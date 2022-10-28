@@ -46,10 +46,6 @@ public class Item implements Comparable<Item> {
         return this.expirationDate.compareTo(o.expirationDate);
     }
 
-    public int weightCompare(Item o) {
-        return Float.compare(this.weight, o.weight);
-    }
-
     public int nameCompare(Item o) {
         return this.name.compareTo(o.name);
     }
