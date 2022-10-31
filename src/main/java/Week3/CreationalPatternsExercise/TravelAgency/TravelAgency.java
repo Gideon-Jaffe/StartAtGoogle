@@ -3,7 +3,6 @@ package Week3.CreationalPatternsExercise.TravelAgency;
 import Week3.CreationalPatternsExercise.Vehicles.Vehicle;
 import Week3.CreationalPatternsExercise.Vehicles.VehicleFactory;
 
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
