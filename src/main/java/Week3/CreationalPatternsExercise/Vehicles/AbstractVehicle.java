@@ -9,4 +9,8 @@ public abstract class AbstractVehicle implements Vehicle {
     public boolean isAvailable() {
         return isAvailable.get();
     }
+
+    protected boolean setTaken() {
+        return this.isAvailable.compareAndSet(true, false);
+    }
 }

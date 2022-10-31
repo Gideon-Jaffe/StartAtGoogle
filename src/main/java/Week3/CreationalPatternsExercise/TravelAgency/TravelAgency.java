@@ -7,16 +7,13 @@ import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Stream;
 
 public class TravelAgency {
 
-    private List<Vehicle> vehicles;
-    private final Stream<Vehicle> availableVehicles;
+    private final List<Vehicle> vehicles;
 
     private TravelAgency(Map<VehicleFactory.VehicleType, Integer> types) {
         this.vehicles = new ArrayList<>();
-        availableVehicles = vehicles.stream().filter(Vehicle::isAvailable);
         for (Map.Entry<VehicleFactory.VehicleType, Integer> entry : types.entrySet()) {
             for (int i = 0; i < entry.getValue(); i++) {
                 this.vehicles.add(VehicleFactory.getInstance().createVehicle(entry.getKey()));
@@ -56,7 +53,7 @@ public class TravelAgency {
         } while (!myVehicle.transport(passenger));
     }
 
-    public Map<Vehicle, Passenger> assignVehicles(List<Passenger> passengers) {
+    public void assignVehicles(List<Passenger> passengers) {
         ExecutorService executorService = Executors.newFixedThreadPool(vehicles.size());
         for (Passenger passenger : passengers) {
             executorService.submit(() -> getAvailableVehicle(passenger));
@@ -67,6 +64,5 @@ public class TravelAgency {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        return null;
     }
 }

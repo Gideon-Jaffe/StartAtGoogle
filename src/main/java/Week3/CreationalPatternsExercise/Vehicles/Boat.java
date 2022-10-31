@@ -5,8 +5,7 @@ import Week3.CreationalPatternsExercise.TravelAgency.Passenger;
 public class Boat extends AbstractVehicle {
     @Override
     public boolean transport(Passenger passenger) {
-        boolean isSuccessful = this.isAvailable.compareAndSet(true, false);
-        if (!isSuccessful) {
+        if (!setTaken()) {
             return false;
         }
         System.out.println("Boat starting transporting - " + passenger.getName());
