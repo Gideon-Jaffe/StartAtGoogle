@@ -27,4 +27,9 @@ public class Passenger {
     public void setFavoriteVehicle(VehicleFactory.VehicleType favoriteVehicle) {
         this.favoriteVehicle = favoriteVehicle;
     }
+
+    @Override
+    public String toString() {
+        return name + ", favoriteVehicle=" + favoriteVehicle;
+    }
 }

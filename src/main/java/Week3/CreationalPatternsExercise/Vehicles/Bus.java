@@ -8,13 +8,9 @@ public class Bus extends AbstractVehicle {
         if (!setTaken()) {
             return false;
         }
-        System.out.println("Bus started transporting - " + passenger.getName());
-        try {
-            Thread.sleep(200);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println("--Bus finished transporting - " + passenger.getName());
+        System.out.println("Bus started transporting - " + passenger);
+        Utils.ThreadUtils.sleep();
+        System.out.println("--Bus finished transporting - " + passenger);
         this.isAvailable.set(true);
         return true;
     }

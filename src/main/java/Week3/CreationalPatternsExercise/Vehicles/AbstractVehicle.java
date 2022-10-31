@@ -1,5 +1,6 @@
 package Week3.CreationalPatternsExercise.Vehicles;
 
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public abstract class AbstractVehicle implements Vehicle {

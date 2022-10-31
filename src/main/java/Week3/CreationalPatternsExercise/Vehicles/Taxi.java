@@ -8,13 +8,9 @@ public class Taxi extends AbstractVehicle {
         if (!setTaken()) {
             return false;
         }
-        System.out.println("Taxi transporting - " + passenger.getName());
-        try {
-            Thread.sleep(200);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println("--Taxi finished transporting - " + passenger.getName());
+        System.out.println("Taxi transporting - " + passenger);
+        Utils.ThreadUtils.sleep();
+        System.out.println("--Taxi finished transporting - " + passenger);
         this.isAvailable.set(true);
         return true;
     }

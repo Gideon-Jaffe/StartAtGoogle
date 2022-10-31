@@ -8,13 +8,9 @@ public class Boat extends AbstractVehicle {
         if (!setTaken()) {
             return false;
         }
-        System.out.println("Boat starting transporting - " + passenger.getName());
-        try {
-            Thread.sleep(200);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println("--Boat finished transporting - " + passenger.getName());
+        System.out.println("Boat starting transporting - " + passenger);
+        Utils.ThreadUtils.sleep();
+        System.out.println("--Boat finished transporting - " + passenger);
         this.isAvailable.set(true);
         return true;
     }
