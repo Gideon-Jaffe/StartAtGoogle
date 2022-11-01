@@ -1,7 +1,7 @@
-package Week3.CreationalPatternsExercise.TravelAgency;
+package Week3.CreationalPatternsExercise.Agency.TravelAgency;
 
-import Week3.CreationalPatternsExercise.Vehicles.Vehicle;
-import Week3.CreationalPatternsExercise.Vehicles.VehicleFactory;
+import Week3.CreationalPatternsExercise.Agency.Vehicles.Vehicle;
+import Week3.CreationalPatternsExercise.Agency.Vehicles.VehicleFactory;
 
 import java.util.*;
 import java.util.concurrent.ExecutorService;

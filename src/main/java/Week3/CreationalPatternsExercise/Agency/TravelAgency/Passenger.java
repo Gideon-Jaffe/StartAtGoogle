@@ -1,7 +1,7 @@
-package Week3.CreationalPatternsExercise.TravelAgency;
+package Week3.CreationalPatternsExercise.Agency.TravelAgency;
 
 import Utils.RandomNames;
-import Week3.CreationalPatternsExercise.Vehicles.VehicleFactory;
+import Week3.CreationalPatternsExercise.Agency.Vehicles.VehicleFactory;
 
 public class Passenger {
     private final String name;

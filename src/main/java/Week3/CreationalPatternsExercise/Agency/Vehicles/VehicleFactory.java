@@ -1,4 +1,4 @@
-package Week3.CreationalPatternsExercise.Vehicles;
+package Week3.CreationalPatternsExercise.Agency.Vehicles;
 
 import java.util.concurrent.ThreadLocalRandom;
 

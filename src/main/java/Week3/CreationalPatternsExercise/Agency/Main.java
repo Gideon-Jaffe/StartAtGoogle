@@ -1,9 +1,9 @@
-package Week3.CreationalPatternsExercise;
+package Week3.CreationalPatternsExercise.Agency;
 
 import Utils.DoubleRandomNames;
 import Utils.RandomNames;
-import Week3.CreationalPatternsExercise.TravelAgency.Passenger;
-import Week3.CreationalPatternsExercise.TravelAgency.TravelAgency;
+import Week3.CreationalPatternsExercise.Agency.TravelAgency.Passenger;
+import Week3.CreationalPatternsExercise.Agency.TravelAgency.TravelAgency;
 
 import java.util.ArrayList;
 import java.util.List;

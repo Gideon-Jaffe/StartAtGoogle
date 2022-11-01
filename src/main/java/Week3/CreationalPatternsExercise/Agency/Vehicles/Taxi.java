@@ -1,6 +1,6 @@
-package Week3.CreationalPatternsExercise.Vehicles;
+package Week3.CreationalPatternsExercise.Agency.Vehicles;
 
-import Week3.CreationalPatternsExercise.TravelAgency.Passenger;
+import Week3.CreationalPatternsExercise.Agency.TravelAgency.Passenger;
 
 public class Taxi extends AbstractVehicle {
     @Override
