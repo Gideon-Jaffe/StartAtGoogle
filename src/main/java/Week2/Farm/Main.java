@@ -1,11 +1,14 @@
 package Week2.Farm;
 
 import Week2.Farm.Farmer.*;
+import Week2.Farm.Farmer.Wooden.WoodenHorse;
 
 public class Main {
     public static void main(String[] args) {
-        checkFarmFunctionality();
-        checkForwarding();
+        /*checkFarmFunctionality();
+        checkForwarding();*/
+
+        checkAdapter();
     }
 
     public static void checkFarmFunctionality() {
@@ -32,5 +35,11 @@ public class Main {
         for (int i = 0; i < 5; i++) {
             myFarmer.moveAnimal(AnimalTypes.Horse);
         }
+    }
+
+    public static void checkAdapter() {
+        WoodenStructureAdapter structure = new WoodenStructureAdapter(new WoodenHorse(5.5f));
+
+        structure.move();
     }
 }

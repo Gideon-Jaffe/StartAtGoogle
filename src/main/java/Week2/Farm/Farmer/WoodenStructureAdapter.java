@@ -32,6 +32,6 @@ public class WoodenStructureAdapter implements Animal {
 
     @Override
     public Animal mate(Animal partner) {
-        return Horse.createRandomHorse().mate(partner);
+        return new WoodenStructureAdapter(new WoodenHorse(5.5f));
     }
 }
