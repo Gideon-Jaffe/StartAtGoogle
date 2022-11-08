@@ -14,18 +14,12 @@ public class AuthenticationController {
     @Autowired
     AuthenticationService authService;
 
-    public AuthenticationController() {
-        /*this.authService = AuthenticationService.getInstance();*/
-    }
-
     @RequestMapping(value = "login", method = RequestMethod.POST, consumes = "application/json")
     public ResponseEntity<Void> login(@RequestBody User user) {
         Utils.checkEmail(user.getEmail());
         Utils.checkPassword(user.getPassword());
         String token = authService.login(user.getEmail(), user.getPassword());
-        ResponseEntity<Void> response = ResponseEntity.noContent().build();
-        response.getHeaders().add("Authorization", token);
-        return response;
+        return ResponseEntity.noContent().header("token", token).build();
     }
 
     @RequestMapping(value = "register", method = RequestMethod.POST, consumes = "application/json")

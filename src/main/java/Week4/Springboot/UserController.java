@@ -1,7 +1,9 @@
 package Week4.Springboot;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -17,61 +19,72 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    /*public UserController() {
-        this.authService = AuthenticationService.getInstance();
-        this.userService = UserService.getInstance();
-    }*/
-
-    @RequestMapping(method = RequestMethod.PATCH)
-    public boolean updateEmail(String mail, @RequestHeader String token) throws IOException {
+    @RequestMapping(value = "email", method = RequestMethod.PATCH)
+    public ResponseEntity<String> updateEmail(@RequestBody User newEmail, @RequestHeader String token) throws IOException {
         try {
-            Utils.checkEmail(mail);
+            Utils.checkEmail(newEmail.getEmail());
         } catch (InvalidParameterException ip) {
             throw new InvalidParameterException("Email not in correct format");
         }
         User user = authService.validate(token);
-        boolean status = userService.updateEmail(user, mail);
+        boolean status = userService.updateEmail(user, newEmail.getEmail());
+        ResponseEntity<String> response;
         if (status) {
-            authService.reloadUser(mail, token);
+            authService.reloadUser(newEmail.getEmail(), token);
+            response = ResponseEntity.ok("Successfully updated email");
+        } else {
+            response = ResponseEntity.internalServerError().build();
         }
-        return status;
+        return response;
     }
 
-    public boolean updateName(String name, String token) throws IOException {
+    @RequestMapping(value = "name", method = RequestMethod.PATCH)
+    public ResponseEntity<String> updateName(@RequestBody User newName, @RequestHeader String token) throws IOException {
         try {
-            Utils.checkName(name);
+            Utils.checkName(newName.getName());
         } catch (InvalidParameterException ip) {
             throw new InvalidParameterException("Name not in correct format");
         }
         User user = authService.validate(token);
-        boolean status = userService.updateName(user, name);
+        boolean status = userService.updateName(user, newName.getName());
+        ResponseEntity<String> response;
         if (status) {
             authService.reloadUser(user.getEmail(), token);
+            response = ResponseEntity.ok("Successfully updated name");
+        } else {
+            response = ResponseEntity.internalServerError().build();
         }
-        return status;
+        return response;
     }
 
-    public boolean updatePassword(String password, String token) throws IOException {
+    @RequestMapping(value = "password", method = RequestMethod.PATCH)
+    public ResponseEntity<String> updatePassword(@RequestBody User newPassword, @RequestHeader String token) throws IOException {
         try {
-            Utils.checkPassword(password);
+            Utils.checkPassword(newPassword.getPassword());
         } catch (InvalidParameterException ip) {
             throw new InvalidParameterException("Email not in correct format");
         }
         User user = authService.validate(token);
-        boolean status = userService.updatePassword(user, password);
+        boolean status = userService.updatePassword(user, newPassword.getPassword());
+        ResponseEntity<String> response;
         if (status) {
             authService.reloadUser(user.getEmail(), token);
+            response = ResponseEntity.ok("Successfully updated password");
+        } else {
+            response = ResponseEntity.internalServerError().build();
         }
-        return status;
+
+        return response;
     }
 
-    public boolean deleteUser(String token) {
+    @RequestMapping(method = RequestMethod.DELETE)
+    public ResponseEntity<Void> deleteUser(@RequestHeader String token) {
         User user = authService.validate(token);
         boolean status = userService.deleteUser(user);
         if (status) {
             authService.removeToken(token);
         }
-        return status;
+        return ResponseEntity.noContent().build();
     }
 }
 

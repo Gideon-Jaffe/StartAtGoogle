@@ -12,7 +12,7 @@ public class UserRepository {
     //cache - load all files when app starts
     //for every read - read from cache
     //for every write - write to files and update cache
-    static String FILE_DIRECTORY = "/path/users/";
+    static String FILE_DIRECTORY = "./users/";
     static Map<String, User> usersCache;
     /*private static volatile UserRepository userRepo;
 

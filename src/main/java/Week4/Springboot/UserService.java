@@ -30,10 +30,6 @@ public class UserService {
         return result;
     }*/
 
-    boolean createUser(User user) {
-        return true;
-    }
-
     boolean updateEmail(User user, String updatedEmail) throws IOException {
         userRepo.deleteFile(user);
         User newUser = new User(user.getId(), updatedEmail, user.getName(), user.getPassword());

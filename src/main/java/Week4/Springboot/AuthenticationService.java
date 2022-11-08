@@ -14,31 +14,14 @@ import java.util.UUID;
 
 @Service
 public class AuthenticationService {
-    //private static AuthenticationService authService;
     @Autowired
     private UserRepository userRepo;
     static int id = 0;
     Map<String, User> userTokens;
 
-    /*private AuthenticationService() {
+    private AuthenticationService() {
         this.userTokens = new HashMap<>();
-        userRepo = UserRepository.getInstance();
-    }*/
-
-    /*public static AuthenticationService getInstance() {
-
-        AuthenticationService result = authService;
-
-        if (result == null) {
-            synchronized (AuthenticationService.class) {
-                result = authService;
-                if (result == null) {
-                    authService = result = new AuthenticationService();
-                }
-            }
-        }
-        return result;
-    }*/
+    }
 
     User register(String email, String name, String password) {
 
