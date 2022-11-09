@@ -1,10 +1,15 @@
 package Week2.Farm.Farmer;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.util.ArrayList;
 import java.util.List;
 
 class Farm {
     private final List<Animal> animals;
+
+    static Logger log = LogManager.getLogger(Farm.class.getName());
 
     Farm() {
         animals = new ArrayList<>();
@@ -26,6 +31,7 @@ class Farm {
                 throw new RuntimeException("Not supported animal type");
         }
         animals.add(acquiredAnimal);
+        log.debug("acquired animal - " + acquiredAnimal);
         return acquiredAnimal;
     }
 
@@ -107,6 +113,7 @@ class Farm {
                     if (animal instanceof Horse || getInnerOfCountingAnimal(animal) instanceof Horse) return animal;
             }
         }
+        log.error("No animal of that type in farm");
         throw new RuntimeException("Animal not in farm");
     }
 

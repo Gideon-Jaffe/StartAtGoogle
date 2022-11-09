@@ -1,10 +1,13 @@
 package Week2.Farm.Farmer;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
 class Cow extends BaseAnimal {
-
+    static Logger log = LogManager.getLogger(Cow.class.getName());
     Cow(Gender gender, int id, float weight) {
         super(gender, id, weight);
     }
@@ -17,6 +20,7 @@ class Cow extends BaseAnimal {
     @Override
     public Animal mate(Animal partner) {
         if (this.getGender() != partner.getGender() && this.getClass().equals(partner.getClass())) {
+            log.trace("Cow mate function");
             return Cow.createRandomCow();
         }
         else {

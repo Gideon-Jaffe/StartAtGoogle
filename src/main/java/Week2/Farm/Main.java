@@ -2,13 +2,18 @@ package Week2.Farm;
 
 import Week2.Farm.Farmer.*;
 import Week2.Farm.Farmer.Wooden.WoodenHorse;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class Main {
-    public static void main(String[] args) {
-        /*checkFarmFunctionality();
-        checkForwarding();*/
 
-        checkAdapter();
+    static Logger log = LogManager.getLogger(Week2.Farm.Main.class.getName());
+    public static void main(String[] args) {
+        log.info("Starting functionality test");
+        checkFarmFunctionality();
+        log.info("Starting forwarding test");
+        checkForwarding();
+        //checkAdapter();
     }
 
     public static void checkFarmFunctionality() {
