@@ -69,14 +69,14 @@ public class UserRepository {
         deleteFile(user.getEmail() + ".json");
     }
 
-    User writeToFile(String fileName, User user) throws IOException {
+    User writeToFile(String fileName, User user){
         Gson gson = new Gson();
         try (FileWriter fw = new FileWriter(FILE_DIRECTORY + fileName)) {
             String userJson = gson.toJson(user);
             fw.write(userJson);
             usersCache.put(user.getEmail(), user);
         } catch (IOException e) {
-            throw new IOException("cant write to new file to update");
+            throw new RuntimeException("cant write to new file to update");
         }
         return user;
     }

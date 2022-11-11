@@ -24,7 +24,7 @@ public class UserController {
         try {
             Utils.checkEmail(newEmail.getEmail());
         } catch (InvalidParameterException ip) {
-            throw new InvalidParameterException("Email not in correct format");
+            return ResponseEntity.badRequest().body("Email not in correct format");
         }
         User user = authService.validate(token);
         boolean status = userService.updateEmail(user, newEmail.getEmail());
@@ -43,7 +43,7 @@ public class UserController {
         try {
             Utils.checkName(newName.getName());
         } catch (InvalidParameterException ip) {
-            throw new InvalidParameterException("Name not in correct format");
+            return ResponseEntity.badRequest().body("Name not in correct format");
         }
         User user = authService.validate(token);
         boolean status = userService.updateName(user, newName.getName());
@@ -62,7 +62,7 @@ public class UserController {
         try {
             Utils.checkPassword(newPassword.getPassword());
         } catch (InvalidParameterException ip) {
-            throw new InvalidParameterException("Email not in correct format");
+            return ResponseEntity.badRequest().body("Password not in correct format");
         }
         User user = authService.validate(token);
         boolean status = userService.updatePassword(user, newPassword.getPassword());

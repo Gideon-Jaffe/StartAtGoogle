@@ -7,30 +7,13 @@ import java.io.IOException;
 
 @Service
 public class UserService {
-    //private static volatile UserService userService;
     @Autowired
     private UserRepository userRepo;
 
     private UserService() {
-        //userRepo = UserRepository.getInstance();
     }
 
-    /*public static UserService getInstance() {
-
-        UserService result = userService;
-
-        if (result == null) {
-            synchronized (AuthenticationService.class) {
-                result = userService;
-                if (result == null) {
-                    userService = result = new UserService();
-                }
-            }
-        }
-        return result;
-    }*/
-
-    boolean updateEmail(User user, String updatedEmail) throws IOException {
+    boolean updateEmail(User user, String updatedEmail){
         userRepo.deleteFile(user);
         User newUser = new User(user.getId(), updatedEmail, user.getName(), user.getPassword());
         updateData(newUser);
@@ -57,7 +40,7 @@ public class UserService {
     }
 
 
-    void updateData(User user) throws IOException {
+    void updateData(User user){
         userRepo.writeToFile(user.getEmail() + ".json", user);
     }
 }
