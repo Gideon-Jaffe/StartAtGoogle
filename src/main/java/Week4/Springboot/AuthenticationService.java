@@ -6,11 +6,7 @@ import org.springframework.stereotype.Service;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.security.InvalidParameterException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class AuthenticationService {
@@ -23,36 +19,30 @@ public class AuthenticationService {
         this.userTokens = new HashMap<>();
     }
 
-    User register(String email, String name, String password) {
+    Optional<User> register(String email, String name, String password) {
 
         if (!checkIfUserExists(email)) {
             User user = new User(id++, email, name, password);
-            try {
-                return userRepo.writeToFile(user.getEmail() + ".json", user);
-            } catch (IOException e) {
-                System.out.println("Couldn't write to file");
-                throw new RuntimeException(e);
-            }
+            return Optional.of(userRepo.writeToFile(user.getEmail() + ".json", user));
         }
-        return null;
+        return Optional.empty();
     }
 
-    User validate(String token) {
+    Optional<User> validate(String token) {
         if (!userTokens.containsKey(token)) {
-            throw new InvalidParameterException("Token incorrect");
+            return Optional.empty();
         }
-        return userTokens.get(token);
+        return Optional.of(userTokens.get(token));
     }
 
 
-    String login(String email, String password) {
+    Optional<String> login(String email, String password) {
         User cachedUser = userRepo.readFromCache(email);
-        if (cachedUser == null) {
-            throw new IllegalArgumentException("user doesn\"t exist");
-        } else if (!Objects.equals(cachedUser.getPassword(), password)) {
-            throw new IllegalArgumentException("wrong password");
+        if (cachedUser == null || !Objects.equals(cachedUser.getPassword(), password)) {
+            return Optional.empty();
         }
-        return createToken(cachedUser);
+
+        return Optional.of(createToken(cachedUser));
     }
 
     private String createToken(User user) {
@@ -71,15 +61,8 @@ public class AuthenticationService {
     }
 
 
-    private static boolean checkIfUserExists(String email) {
-        try (FileReader fr = new FileReader(email + ".json")) {
-        } catch (FileNotFoundException e) {
-            return false;
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        return true;
+    private boolean checkIfUserExists(String email) {
+        return userRepo.readFromCache(email) != null;
     }
 }
 

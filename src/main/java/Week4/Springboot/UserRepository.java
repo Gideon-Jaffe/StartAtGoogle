@@ -14,29 +14,15 @@ public class UserRepository {
     //for every write - write to files and update cache
     static String FILE_DIRECTORY = "./users/";
     static Map<String, User> usersCache;
-    /*private static volatile UserRepository userRepo;
-
-    static UserRepository getInstance() {
-
-        UserRepository result = userRepo;
-
-        if (result == null) {
-            synchronized (AuthenticationService.class) {
-                result = userRepo;
-                if (result == null) {
-                    userRepo = result = new UserRepository();
-                }
-            }
-        }
-        return result;
-    }*/
 
     private UserRepository() {
 
         usersCache = new HashMap<>();
         File file = new File(FILE_DIRECTORY);
         if (!file.exists()) {
-            file.mkdirs();
+            if (!file.mkdirs()) {
+                throw new RuntimeException("Error - Cant crete users folder!");
+            }
         }
         loadAllUsersToCache(file);
     }

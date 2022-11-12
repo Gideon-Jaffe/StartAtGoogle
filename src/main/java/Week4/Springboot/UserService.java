@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 @Service
 public class UserService {
@@ -13,35 +14,33 @@ public class UserService {
     private UserService() {
     }
 
-    boolean updateEmail(User user, String updatedEmail){
+    LocalDateTime updateEmail(User user, String updatedEmail){
         userRepo.deleteFile(user);
         User newUser = new User(user.getId(), updatedEmail, user.getName(), user.getPassword());
-        updateData(newUser);
-        return true;
+        return updateData(newUser);
     }
 
-    boolean updateName(User user, String updatedName) throws IOException {
-        userRepo.deleteFile(user);
+    LocalDateTime updateName(User user, String updatedName) {
+        //userRepo.deleteFile(user);
         User newUser = new User(user.getId(), user.getEmail(), updatedName, user.getPassword());
-        updateData(newUser);
-        return true;
+        return updateData(newUser);
     }
 
-    boolean updatePassword(User user, String updatedPassword) throws IOException {
-        userRepo.deleteFile(user);
+    LocalDateTime updatePassword(User user, String updatedPassword) {
+        //userRepo.deleteFile(user);
         User newUser = new User(user.getId(), user.getEmail(), user.getName(), updatedPassword);
-        updateData(newUser);
-        return true;
+        return updateData(newUser);
     }
 
-    boolean deleteUser(User user) {
+    LocalDateTime deleteUser(User user) {
         userRepo.deleteFile(user);
-        return true;
+        return LocalDateTime.now();
     }
 
 
-    void updateData(User user){
+    LocalDateTime updateData(User user){
         userRepo.writeToFile(user.getEmail() + ".json", user);
+        return LocalDateTime.now();
     }
 }
 
