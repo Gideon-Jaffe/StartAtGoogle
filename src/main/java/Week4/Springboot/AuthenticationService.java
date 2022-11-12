@@ -9,7 +9,6 @@ import java.util.*;
 public class AuthenticationService {
     @Autowired
     private UserRepository userRepo;
-    static int id = 0;
     Map<String, String> userTokens;
 
     private AuthenticationService() {

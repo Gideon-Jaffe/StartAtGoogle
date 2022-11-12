@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 @Repository
 public class UserRepository {
@@ -32,7 +33,7 @@ public class UserRepository {
     }
 
     private void loadAllUsersToCache(File folder) {
-        for (File fileEntry : folder.listFiles()) {
+        for (File fileEntry : Objects.requireNonNull(folder.listFiles())) {
             if (!fileEntry.isDirectory()) {
                 if (Utils.isJsonFile(fileEntry)) {
                     User user = readFromFile(fileEntry.getAbsolutePath());
@@ -44,20 +45,12 @@ public class UserRepository {
 
     void deleteFile(String path) {
         File file = new File(FILE_DIRECTORY + path);
-        boolean b = file.delete();
-    }
-
-    void deleteFile(User user) {
-        if (!usersCache.containsKey(user.getEmail())) {
-            throw new IllegalArgumentException("cant remove user that doesnt exist");
-        }
-        usersCache.remove(user.getEmail());
-        deleteFile(user.getEmail() + ".json");
+        file.delete();
     }
 
     User deleteUser(String email) {
         if (!usersCache.containsKey(email)) {
-            throw new IllegalArgumentException("cant remove user that doesnt exist");
+            throw new IllegalArgumentException("cant remove user that doesn't exist");
         }
         User deletedUser = usersCache.get(email);
         usersCache.remove(email);
@@ -79,7 +72,7 @@ public class UserRepository {
 
     private User readFromFile(String fileName) {
 
-        User readUser = null;
+        User readUser;
         try (FileReader fr = new FileReader(fileName)) {
             Gson gson = new Gson();
             readUser = gson.fromJson(fr, User.class);
