@@ -17,14 +17,14 @@ public class AuthenticationController {
     AuthenticationService authService;
 
     @RequestMapping(value = "login", method = RequestMethod.POST, consumes = "application/json")
-    public ResponseEntity<String> login(@RequestBody User user) {
+    public ResponseEntity<Object> login(@RequestBody User user) {
         if (!Utils.isEmailValidFormat(user.getEmail()) || !Utils.isPasswordValidFormat(user.getPassword())) {
             return ResponseEntity.badRequest().body("Must send email, and password in correct format!");
         }
 
         Optional<String> token = authService.login(user.getEmail(), user.getPassword());
 
-        return token.<ResponseEntity<String>>map(s -> ResponseEntity.noContent().header("token", s).build())
+        return token.map(s -> ResponseEntity.noContent().header("token", s).build())
                 .orElseGet(() -> ResponseEntity.badRequest().body("Incorrect email or password"));
 
     }
