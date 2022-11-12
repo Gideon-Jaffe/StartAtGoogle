@@ -19,7 +19,7 @@ public class AuthenticationService {
     Optional<User> register(String email, String name, String password) {
 
         if (!checkIfUserExists(email)) {
-            User user = new User(id++, email, name, password);
+            User user = new User((int)UUID.randomUUID().getMostSignificantBits(), email, name, password);
             return Optional.of(userRepo.writeToFile(user.getEmail() + ".json", user));
         } else {
             return Optional.empty();
