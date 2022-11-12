@@ -3,9 +3,6 @@ package Week4.Springboot;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.*;
 
 @Service
@@ -13,7 +10,7 @@ public class AuthenticationService {
     @Autowired
     private UserRepository userRepo;
     static int id = 0;
-    Map<String, User> userTokens;
+    Map<String, String> userTokens;
 
     private AuthenticationService() {
         this.userTokens = new HashMap<>();
@@ -24,15 +21,17 @@ public class AuthenticationService {
         if (!checkIfUserExists(email)) {
             User user = new User(id++, email, name, password);
             return Optional.of(userRepo.writeToFile(user.getEmail() + ".json", user));
-        }
-        return Optional.empty();
-    }
-
-    Optional<User> validate(String token) {
-        if (!userTokens.containsKey(token)) {
+        } else {
             return Optional.empty();
         }
-        return Optional.of(userTokens.get(token));
+    }
+
+    Optional<String> validate(String token) {
+        if (!userTokens.containsKey(token)) {
+            return Optional.empty();
+        } else {
+            return Optional.of(userTokens.get(token));
+        }
     }
 
 
@@ -40,20 +39,19 @@ public class AuthenticationService {
         User cachedUser = userRepo.readFromCache(email);
         if (cachedUser == null || !Objects.equals(cachedUser.getPassword(), password)) {
             return Optional.empty();
+        } else {
+            return Optional.of(createToken(cachedUser.getEmail()));
         }
-
-        return Optional.of(createToken(cachedUser));
     }
 
-    private String createToken(User user) {
+    private String createToken(String userEmail) {
         String token = UUID.randomUUID().toString();
-        userTokens.put(token, user);
+        userTokens.put(token, userEmail);
         return token;
     }
 
     void reloadUser(String email, String token) {
-        User updatedUser = userRepo.readFromCache(email);
-        userTokens.put(token, updatedUser);
+        userTokens.put(token, email);
     }
 
     void removeToken(String token) {

@@ -55,6 +55,16 @@ public class UserRepository {
         deleteFile(user.getEmail() + ".json");
     }
 
+    User deleteUser(String email) {
+        if (!usersCache.containsKey(email)) {
+            throw new IllegalArgumentException("cant remove user that doesnt exist");
+        }
+        User deletedUser = usersCache.get(email);
+        usersCache.remove(email);
+        deleteFile(email + ".json");
+        return deletedUser;
+    }
+
     User writeToFile(String fileName, User user){
         Gson gson = new Gson();
         try (FileWriter fw = new FileWriter(FILE_DIRECTORY + fileName)) {

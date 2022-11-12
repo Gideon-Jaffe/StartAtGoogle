@@ -26,10 +26,10 @@ public class UserController {
             return ResponseEntity.badRequest().body("Email not valid format!");
         }
 
-        Optional<User> user = authService.validate(token);
+        Optional<String> userEmail = authService.validate(token);
 
-        if (user.isPresent()) {
-            LocalDateTime updateTime = userService.updateEmail(user.get(), newEmail.getEmail());
+        if (userEmail.isPresent()) {
+            LocalDateTime updateTime = userService.updateEmail(userEmail.get(), newEmail.getEmail());
             authService.reloadUser(newEmail.getEmail(), token);
             return ResponseEntity.ok(String.format("{\"timeUpdated\":%s, \"newEmail\":%s}", updateTime.format(DateTimeFormatter.ISO_LOCAL_TIME), newEmail.getEmail()));
         } else {
@@ -43,11 +43,11 @@ public class UserController {
             return ResponseEntity.badRequest().body("Name not in correct format");
         }
 
-        Optional<User> user = authService.validate(token);
+        Optional<String> userEmail = authService.validate(token);
 
-        if (user.isPresent()) {
-            LocalDateTime updateTime = userService.updateName(user.get(), newName.getName());
-            authService.reloadUser(user.get().getEmail(), token);
+        if (userEmail.isPresent()) {
+            LocalDateTime updateTime = userService.updateName(userEmail.get(), newName.getName());
+            authService.reloadUser(userEmail.get(), token);
             return ResponseEntity.ok(String.format("{\"timeUpdated\":%s, \"newName\":%s}", updateTime.format(DateTimeFormatter.ISO_LOCAL_TIME), newName.getName()));
         } else {
             return ResponseEntity.badRequest().body("Token not valid!");
@@ -60,11 +60,10 @@ public class UserController {
             return ResponseEntity.badRequest().body("Password not in correct format");
         }
 
-        Optional<User> user = authService.validate(token);
+        Optional<String> userEmail = authService.validate(token);
 
-        if (user.isPresent()) {
-            LocalDateTime updateTime = userService.updatePassword(user.get(), newPassword.getPassword());
-            authService.reloadUser(user.get().getEmail(), token);
+        if (userEmail.isPresent()) {
+            LocalDateTime updateTime = userService.updatePassword(userEmail.get(), newPassword.getPassword());
             return ResponseEntity.ok(String.format("{\"timeUpdated\":%s}", updateTime.format(DateTimeFormatter.ISO_LOCAL_TIME)));
         } else {
             return ResponseEntity.badRequest().body("Token Not Valid!");
@@ -73,11 +72,12 @@ public class UserController {
 
     @RequestMapping(method = RequestMethod.DELETE)
     public ResponseEntity<String> deleteUser(@RequestHeader String token) {
-        Optional<User> user = authService.validate(token);
-        if (!user.isPresent()) {
+        Optional<String> userEmail = authService.validate(token);
+
+        if (!userEmail.isPresent()) {
             return ResponseEntity.badRequest().body("Token not valid!");
         } else {
-            LocalDateTime deleteTime = userService.deleteUser(user.get());
+            LocalDateTime deleteTime = userService.deleteUser(userEmail.get());
             authService.removeToken(token);
             return ResponseEntity.ok(String.format("{\"timeDeleted\":%s}", deleteTime.format(DateTimeFormatter.ISO_LOCAL_TIME)));
         }
