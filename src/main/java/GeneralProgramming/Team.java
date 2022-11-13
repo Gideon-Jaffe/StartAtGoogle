@@ -5,6 +5,7 @@ import Utils.RandomNames;
 import javafx.util.Pair;
 
 import java.io.*;
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,23 +13,15 @@ public class Team {
 
     private static final int TEAM_SIZE = 11;
 
-    String name;
-    List<FootBallPlayer> players;
+    private final String name;
+    private List<FootBallPlayer> players;
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public List<FootBallPlayer> getPlayers() {
         return players;
-    }
-
-    public void setPlayers(List<FootBallPlayer> players) {
-        this.players = players;
     }
 
     public Team(String name) {
@@ -86,6 +79,7 @@ public class Team {
 
     @Override
     public String toString() {
+        if (this.getPlayers() == null) return "Team Name: " + this.name + " Total Players: " + 0;
         StringBuilder returnString = new StringBuilder("Team Name: " + this.name + " Total Players: " + this.players.size());
         for (FootBallPlayer player : players) {
             returnString.append("\n").append(player.toString());
@@ -103,6 +97,7 @@ public class Team {
     }
 
     private static void checkAndFixTeamRequirements(List<Pair<FootBallPlayer.Position, Integer>> requirements) {
+        if (requirements == null) throw new InvalidParameterException("Array cant be null");;
         int teamSize = TEAM_SIZE;
         List<FootBallPlayer.Position> values = new ArrayList<>(List.of(FootBallPlayer.Position.values()));
         for (Pair<FootBallPlayer.Position, Integer> req : requirements) {
@@ -111,17 +106,17 @@ public class Team {
                 values.remove(req.getKey());
                 teamSize -= req.getValue();
             } else {
-                throw new RuntimeException("Team Requirements not legal");
+                throw new InvalidParameterException("Team Requirements not legal");
             }
         }
 
-        if (values.size() > 0) throw new RuntimeException("All positions not specified");
+        if (values.size() > 0) throw new InvalidParameterException("All positions not specified");
     }
 
     private static void checkPositionRequirements(Pair<FootBallPlayer.Position, Integer> positionRequirements) {
         int min = (positionRequirements.getKey() == FootBallPlayer.Position.GOAL_KEEPER) ? 1 : 2;
         if (min > positionRequirements.getValue()) {
-            throw new RuntimeException("Team Requirements not legal");
+            throw new InvalidParameterException("Team Requirements not legal");
         }
     }
 }
