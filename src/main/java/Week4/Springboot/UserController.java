@@ -8,8 +8,9 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import java.io.IOException;
-import java.security.InvalidParameterException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/user")
@@ -20,71 +21,66 @@ public class UserController {
     UserService userService;
 
     @RequestMapping(value = "email", method = RequestMethod.PATCH)
-    public ResponseEntity<String> updateEmail(@RequestBody User newEmail, @RequestHeader String token) throws IOException {
-        try {
-            Utils.checkEmail(newEmail.getEmail());
-        } catch (InvalidParameterException ip) {
-            throw new InvalidParameterException("Email not in correct format");
+    public ResponseEntity<String> updateEmail(@RequestBody User newEmail, @RequestHeader String token) {
+        if (!Utils.isEmailValidFormat(newEmail.getEmail())) {
+            return ResponseEntity.badRequest().body("Email not valid format!");
         }
-        User user = authService.validate(token);
-        boolean status = userService.updateEmail(user, newEmail.getEmail());
-        ResponseEntity<String> response;
-        if (status) {
+
+        Optional<String> userEmail = authService.validate(token);
+
+        if (userEmail.isPresent()) {
+            LocalDateTime updateTime = userService.updateEmail(userEmail.get(), newEmail.getEmail());
             authService.reloadUser(newEmail.getEmail(), token);
-            response = ResponseEntity.ok("Successfully updated email");
+            return ResponseEntity.ok(String.format("{\"timeUpdated\":%s, \"newEmail\":%s}", updateTime.format(DateTimeFormatter.ISO_LOCAL_TIME), newEmail.getEmail()));
         } else {
-            response = ResponseEntity.internalServerError().build();
+            return ResponseEntity.badRequest().body("Token not valid!");
         }
-        return response;
     }
 
     @RequestMapping(value = "name", method = RequestMethod.PATCH)
-    public ResponseEntity<String> updateName(@RequestBody User newName, @RequestHeader String token) throws IOException {
-        try {
-            Utils.checkName(newName.getName());
-        } catch (InvalidParameterException ip) {
-            throw new InvalidParameterException("Name not in correct format");
+    public ResponseEntity<String> updateName(@RequestBody User newName, @RequestHeader String token) {
+        if (!Utils.isNameValidFormat(newName.getName())) {
+            return ResponseEntity.badRequest().body("Name not in correct format");
         }
-        User user = authService.validate(token);
-        boolean status = userService.updateName(user, newName.getName());
-        ResponseEntity<String> response;
-        if (status) {
-            authService.reloadUser(user.getEmail(), token);
-            response = ResponseEntity.ok("Successfully updated name");
+
+        Optional<String> userEmail = authService.validate(token);
+
+        if (userEmail.isPresent()) {
+            LocalDateTime updateTime = userService.updateName(userEmail.get(), newName.getName());
+            authService.reloadUser(userEmail.get(), token);
+            return ResponseEntity.ok(String.format("{\"timeUpdated\":%s, \"newName\":%s}", updateTime.format(DateTimeFormatter.ISO_LOCAL_TIME), newName.getName()));
         } else {
-            response = ResponseEntity.internalServerError().build();
+            return ResponseEntity.badRequest().body("Token not valid!");
         }
-        return response;
     }
 
     @RequestMapping(value = "password", method = RequestMethod.PATCH)
-    public ResponseEntity<String> updatePassword(@RequestBody User newPassword, @RequestHeader String token) throws IOException {
-        try {
-            Utils.checkPassword(newPassword.getPassword());
-        } catch (InvalidParameterException ip) {
-            throw new InvalidParameterException("Email not in correct format");
-        }
-        User user = authService.validate(token);
-        boolean status = userService.updatePassword(user, newPassword.getPassword());
-        ResponseEntity<String> response;
-        if (status) {
-            authService.reloadUser(user.getEmail(), token);
-            response = ResponseEntity.ok("Successfully updated password");
-        } else {
-            response = ResponseEntity.internalServerError().build();
+    public ResponseEntity<String> updatePassword(@RequestBody User newPassword, @RequestHeader String token) {
+        if (!Utils.isPasswordValidFormat(newPassword.getPassword())) {
+            return ResponseEntity.badRequest().body("Password not in correct format");
         }
 
-        return response;
+        Optional<String> userEmail = authService.validate(token);
+
+        if (userEmail.isPresent()) {
+            LocalDateTime updateTime = userService.updatePassword(userEmail.get(), newPassword.getPassword());
+            return ResponseEntity.ok(String.format("{\"timeUpdated\":%s}", updateTime.format(DateTimeFormatter.ISO_LOCAL_TIME)));
+        } else {
+            return ResponseEntity.badRequest().body("Token Not Valid!");
+        }
     }
 
     @RequestMapping(method = RequestMethod.DELETE)
-    public ResponseEntity<Void> deleteUser(@RequestHeader String token) {
-        User user = authService.validate(token);
-        boolean status = userService.deleteUser(user);
-        if (status) {
+    public ResponseEntity<String> deleteUser(@RequestHeader String token) {
+        Optional<String> userEmail = authService.validate(token);
+
+        if (!userEmail.isPresent()) {
+            return ResponseEntity.badRequest().body("Token not valid!");
+        } else {
+            LocalDateTime deleteTime = userService.deleteUser(userEmail.get());
             authService.removeToken(token);
+            return ResponseEntity.ok(String.format("{\"timeDeleted\":%s}", deleteTime.format(DateTimeFormatter.ISO_LOCAL_TIME)));
         }
-        return ResponseEntity.noContent().build();
     }
 }
 

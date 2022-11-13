@@ -3,62 +3,43 @@ package Week4.Springboot;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
+import java.time.LocalDateTime;
 
 @Service
 public class UserService {
-    //private static volatile UserService userService;
     @Autowired
     private UserRepository userRepo;
 
     private UserService() {
-        //userRepo = UserRepository.getInstance();
     }
 
-    /*public static UserService getInstance() {
-
-        UserService result = userService;
-
-        if (result == null) {
-            synchronized (AuthenticationService.class) {
-                result = userService;
-                if (result == null) {
-                    userService = result = new UserService();
-                }
-            }
-        }
-        return result;
-    }*/
-
-    boolean updateEmail(User user, String updatedEmail) throws IOException {
-        userRepo.deleteFile(user);
-        User newUser = new User(user.getId(), updatedEmail, user.getName(), user.getPassword());
-        updateData(newUser);
-        return true;
+    LocalDateTime updateEmail(String userId, String updatedEmail){
+        User deletedUser = userRepo.deleteUser(userId);
+        User newUser = new User(deletedUser.getId(), updatedEmail, deletedUser.getName(), deletedUser.getPassword());
+        return updateData(newUser);
     }
 
-    boolean updateName(User user, String updatedName) throws IOException {
-        userRepo.deleteFile(user);
+    LocalDateTime updateName(String userEmail, String updatedName) {
+        User user = userRepo.readFromCache(userEmail);
         User newUser = new User(user.getId(), user.getEmail(), updatedName, user.getPassword());
-        updateData(newUser);
-        return true;
+        return updateData(newUser);
     }
 
-    boolean updatePassword(User user, String updatedPassword) throws IOException {
-        userRepo.deleteFile(user);
+    LocalDateTime updatePassword(String userEmail, String updatedPassword) {
+        User user = userRepo.readFromCache(userEmail);
         User newUser = new User(user.getId(), user.getEmail(), user.getName(), updatedPassword);
-        updateData(newUser);
-        return true;
+        return updateData(newUser);
     }
 
-    boolean deleteUser(User user) {
-        userRepo.deleteFile(user);
-        return true;
+    LocalDateTime deleteUser(String userEmail) {
+        userRepo.deleteUser(userEmail);
+        return LocalDateTime.now();
     }
 
 
-    void updateData(User user) throws IOException {
+    LocalDateTime updateData(User user){
         userRepo.writeToFile(user.getEmail() + ".json", user);
+        return LocalDateTime.now();
     }
 }
 

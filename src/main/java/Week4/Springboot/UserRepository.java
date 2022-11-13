@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 @Repository
 public class UserRepository {
@@ -14,29 +15,15 @@ public class UserRepository {
     //for every write - write to files and update cache
     static String FILE_DIRECTORY = "./users/";
     static Map<String, User> usersCache;
-    /*private static volatile UserRepository userRepo;
-
-    static UserRepository getInstance() {
-
-        UserRepository result = userRepo;
-
-        if (result == null) {
-            synchronized (AuthenticationService.class) {
-                result = userRepo;
-                if (result == null) {
-                    userRepo = result = new UserRepository();
-                }
-            }
-        }
-        return result;
-    }*/
 
     private UserRepository() {
 
         usersCache = new HashMap<>();
         File file = new File(FILE_DIRECTORY);
         if (!file.exists()) {
-            file.mkdirs();
+            if (!file.mkdirs()) {
+                throw new RuntimeException("Error - Cant crete users folder!");
+            }
         }
         loadAllUsersToCache(file);
     }
@@ -46,7 +33,7 @@ public class UserRepository {
     }
 
     private void loadAllUsersToCache(File folder) {
-        for (File fileEntry : folder.listFiles()) {
+        for (File fileEntry : Objects.requireNonNull(folder.listFiles())) {
             if (!fileEntry.isDirectory()) {
                 if (Utils.isJsonFile(fileEntry)) {
                     User user = readFromFile(fileEntry.getAbsolutePath());
@@ -58,32 +45,34 @@ public class UserRepository {
 
     void deleteFile(String path) {
         File file = new File(FILE_DIRECTORY + path);
-        boolean b = file.delete();
+        file.delete();
     }
 
-    void deleteFile(User user) {
-        if (!usersCache.containsKey(user.getEmail())) {
-            throw new IllegalArgumentException("cant remove user that doesnt exist");
+    User deleteUser(String email) {
+        if (!usersCache.containsKey(email)) {
+            throw new IllegalArgumentException("cant remove user that doesn't exist");
         }
-        usersCache.remove(user.getEmail());
-        deleteFile(user.getEmail() + ".json");
+        User deletedUser = usersCache.get(email);
+        usersCache.remove(email);
+        deleteFile(email + ".json");
+        return deletedUser;
     }
 
-    User writeToFile(String fileName, User user) throws IOException {
+    User writeToFile(String fileName, User user){
         Gson gson = new Gson();
         try (FileWriter fw = new FileWriter(FILE_DIRECTORY + fileName)) {
             String userJson = gson.toJson(user);
             fw.write(userJson);
             usersCache.put(user.getEmail(), user);
         } catch (IOException e) {
-            throw new IOException("cant write to new file to update");
+            throw new RuntimeException("cant write to new file to update");
         }
         return user;
     }
 
     private User readFromFile(String fileName) {
 
-        User readUser = null;
+        User readUser;
         try (FileReader fr = new FileReader(fileName)) {
             Gson gson = new Gson();
             readUser = gson.fromJson(fr, User.class);
